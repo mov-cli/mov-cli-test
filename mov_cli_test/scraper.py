@@ -47,8 +47,7 @@ class TestScraper(Scraper):
                 url = url, 
                 title = metadata.title, 
                 referrer = url, 
-                episode = episode.episode, 
-                season = episode.season,
+                episode = episode, 
                 subtitles = None
             )
 
