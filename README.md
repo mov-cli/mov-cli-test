@@ -12,7 +12,7 @@ Here's how to install and add the plugin to mov-cli.
 
 1. Install the pip package.
 ```sh
-pip install git+https://github.com/THEGOLDENPRO/mov-cli-test
+pip install mov-cli-test
 ```
 2. Then add the plugin to your mov-cli config.
 ```sh
@@ -25,5 +25,5 @@ test = "mov-cli-test"
 
 ## Usage
 ```sh
-mov-cli abc --scraper test.test
+mov-cli -s test abc
 ```

@@ -24,8 +24,9 @@ dependencies = [
     "requests",
     "importlib-metadata; python_version<'3.8'",
 
-    "mov-cli>=4.0.3",
-    "pytube"
+    "mov-cli>=4.2",
+    "pytube",
+    "devgoldyutils>=2.5.8"
 ]
 
 dynamic = ["version"]

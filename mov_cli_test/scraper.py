@@ -2,18 +2,21 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import List, Optional, Dict
+    from typing import Iterable, Optional, Dict
 
     from mov_cli import Config
     from mov_cli.http_client import HTTPClient
 
 from pytube import YouTube
+from devgoldyutils import Colours, LoggerAdapter
 
-from mov_cli import utils
-from mov_cli.scraper import Scraper
-from mov_cli import Series, Movie, Metadata, MetadataType
+from mov_cli.logger import mov_cli_logger
+from mov_cli.utils import EpisodeSelector
+from mov_cli import Scraper, Series, Movie, Metadata, MetadataType
 
 __all__ = ("TestScraper",)
+
+logger = LoggerAdapter(mov_cli_logger, prefix = "Test")
 
 class TestScraper(Scraper):
     def __init__(self, config: Config, http_client: HTTPClient) -> None:
@@ -23,17 +26,53 @@ class TestScraper(Scraper):
             Metadata(id = "https://cdn.devgoldy.xyz/ricky.webm", title = "Ricky :)", type = MetadataType.MOVIE, year = "2009")
         ]
 
+        self.message = f"""
+  ✨ {Colours.CLAY}Welcome to {Colours.PURPLE}mov-cli{Colours.RESET}!!!
+
+  mov-cli is a command line tool used to stream or watch anything and everything from the comfort of your terminal.
+  The plugin you just executed right now is a test plugin that contains some free films and animations in the creative commons.
+
+  {Colours.BLUE}To leverage the full power of mov-cli you must install more plugins.{Colours.RESET}
+
+  You can find third-party plugins over here: {Colours.PINK_GREY}https://github.com/topics/mov-cli-plugin{Colours.RESET}
+  Then you can find the instructions on how to install a plugin over here: {Colours.PINK_GREY}https://github.com/mov-cli/mov-cli/wiki/Plugins{Colours.RESET}
+        """
+
         super().__init__(config, http_client)
 
-    def search(self, query: str, limit: int = None) -> List[Metadata]:
+    def search(self, query: str, limit: int = None) -> Iterable[Metadata]:
         # This is where you would want to implement searching for your scraper. 
         # This method is called whenever the user searches for something.
 
-        return self.creative_common_films # NOTE: In my case I already know the media so let's just my hardcoded metadata.
+        # ignore this
+        # -------------
+        if query.lower() in ["abc", "all", "example"]:
+            logger.warning("This is an example/test plugin for mov-cli, press enter to skip if you aren't new to that.")
+            input(self.message + Colours.GREEN.apply("\n  Press ENTER to continue... "))
+            for x in self.creative_common_films: yield x
 
-    def scrape(self, metadata: Metadata, episode: Optional[utils.EpisodeSelector] = None) -> Series | Movie:
+        # There's two ways of doing this, I highly encourage the second but here's the first way.
+        """
+        search_results: List[Metadata] = []
+
+        for metadata in self.creative_common_films:
+
+            if query in metadata.title:
+                search_results.append(metadata)
+
+        return search_results
+        """
+
+        # Then here's the second and better way.
+        for metadata in self.creative_common_films:
+
+            # this is basically a poor mans search algorithm.
+            if query.lower() in metadata.title.lower():
+                yield metadata # yield the element instead of appending it to a list for better performance and UX.
+
+    def scrape(self, metadata: Metadata, episode: Optional[EpisodeSelector] = None, **kwargs) -> Series | Movie:
         if episode is None:
-            episode = utils.EpisodeSelector()
+            episode = EpisodeSelector()
 
         url = metadata.id
 
@@ -59,6 +98,6 @@ class TestScraper(Scraper):
             subtitles = None
         )
 
-    def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int | None, int]:
+    def scrape_episodes(self, metadata: Metadata, **kwargs) -> Dict[int | None, int]:
         # NOTE: Let's just return None for now as we don't have any series in the list hence no episodes.
         return {None: 1}
