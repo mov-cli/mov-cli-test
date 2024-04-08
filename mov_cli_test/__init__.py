@@ -8,10 +8,11 @@ from .scraper import *
 
 plugin: PluginHookData = {
     "version": 1, 
+    "package_name": "mov-cli-test", 
     "scrapers": {
         "DEFAULT": TestScraper,
         "test": TestScraper
     }
 }
 
-__version__ = "1.1.0"
+__version__ = "1.1.1"
