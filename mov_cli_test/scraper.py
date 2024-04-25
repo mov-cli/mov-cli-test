@@ -73,7 +73,7 @@ class TestScraper(Scraper):
                 yield metadata # yield the element instead of appending it to a list for better performance and UX.
 
     def scrape(self, metadata: Metadata, episode: EpisodeSelector) -> Multi | Single:
-        scrape_stream_url = self.options.get("stream_url", False)
+        scrape_stream_url = self.options.get("use_stream_url", False)
 
         url = metadata.id
 
