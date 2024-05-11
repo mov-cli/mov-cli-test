@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from mov_cli.http_client import HTTPClient
     from mov_cli.scraper import ScraperOptionsT
 
-from pytube import YouTube
+from pytubefix import YouTube
 from devgoldyutils import Colours
 
 from mov_cli.utils import EpisodeSelector
