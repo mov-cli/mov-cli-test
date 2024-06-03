@@ -82,7 +82,7 @@ class TestScraper(Scraper):
 
         # NOTE: I could have just dropped multi as all the media in my list are 
         # films and not series but I'll leave it in here as an example.
-        if metadata.type == MetadataType.SERIES:
+        if metadata.type == MetadataType.MULTI:
             return Multi(
                 url = url, 
                 title = metadata.title, 
